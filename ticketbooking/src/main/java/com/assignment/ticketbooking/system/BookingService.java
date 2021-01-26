@@ -5,14 +5,19 @@ import java.util.List;
 import com.assignment.ticketbooking.model.Seat;
 import com.assignment.ticketbooking.model.User;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
 public class BookingService extends Thread {
 
-    private TicketCounter ticketCounter;
+    @Autowired
+    TicketCounter ticketCounter;
+    
     private User customer;
     private List<Seat> listOfSeatsToBook;
-    private int availableSeats;
 
-    public BookingService(TicketCounter ticketCounter, User custoUser, List<Seat> seatList, int availableSeats) {
+    public BookingService(TicketCounter ticketCounter, User custoUser, List<Seat> seatList) {
         this.ticketCounter = ticketCounter;
         customer = new User();
         this.customer.setUserId(custoUser.getUserId());
@@ -20,11 +25,10 @@ public class BookingService extends Thread {
         this.customer.setMobNo(custoUser.getMobNo());
         this.customer.setEmailId(custoUser.getEmailId());
         this.listOfSeatsToBook = seatList;
-        this.availableSeats = availableSeats;
     }
 
     @Override
     public void run() {
-        ticketCounter.bookTicket(customer, listOfSeatsToBook, availableSeats);
+        ticketCounter.bookTicket(customer, listOfSeatsToBook);
     }
 }

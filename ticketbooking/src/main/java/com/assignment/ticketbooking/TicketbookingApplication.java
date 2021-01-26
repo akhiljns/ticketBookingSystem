@@ -4,29 +4,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.assignment.ticketbooking.model.Seat;
-import com.assignment.ticketbooking.model.SeatStatus;
 import com.assignment.ticketbooking.model.User;
 import com.assignment.ticketbooking.system.BookingService;
 import com.assignment.ticketbooking.system.TicketCounter;
 
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
 public class TicketbookingApplication {
-
-	static SeatStatus seats[][] = new SeatStatus[30][10];
-	static int availableSeats = 300;
-
-	public static void initSeat() {
-		for (int i = 0; i < 30; i++)
-			for (int j = 0; j < 10; j++)
-				seats[i][j] = SeatStatus.SEAT_NOT_BOOKED;
-	}
 
 	public static void main(String[] args) {
 
-		initSeat();
+		TicketCounter.initSeats();
 
-		TicketCounter ticketCounter1 = new TicketCounter(seats);
-		TicketCounter ticketCounter2 = new TicketCounter(seats);
-		TicketCounter ticketCounter3 = new TicketCounter(seats);
+		TicketCounter ticketCounter1 = new TicketCounter();
+		TicketCounter ticketCounter2 = new TicketCounter();
+		TicketCounter ticketCounter3 = new TicketCounter();
 
 		User user1 = new User(1, "amit", 887777662, "mail.com");
 		User user2 = new User(2, "ben", 887777663, "mail.com");
@@ -51,13 +45,15 @@ public class TicketbookingApplication {
 		ls3.add(s97);
 		ls3.add(s11);
 
-		BookingService bs1 = new BookingService(ticketCounter1, user1, ls1, availableSeats);
-		BookingService bs2 = new BookingService(ticketCounter2, user2, ls2, availableSeats);
-		BookingService bs3 = new BookingService(ticketCounter3, user3, ls3, availableSeats);
+		BookingService bs1 = new BookingService(ticketCounter1, user1, ls1);
+		BookingService bs2 = new BookingService(ticketCounter2, user2, ls2);
+		BookingService bs3 = new BookingService(ticketCounter3, user3, ls2);
 
 		bs1.start();
 		bs2.start();
 		bs3.start();
+
+		SpringApplication.run(TicketbookingApplication.class, args);
 	}
 
 }
